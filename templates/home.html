@@ -1,0 +1,138 @@
+{% extends "masterPage.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-1">
+
+    </div>
+        <div class="col-6">
+            <div class="section">
+                <div class="panel panel--loose panel--raised base-margin-bottom" style="padding: 50px;">
+                    <h2 class="subtitle">DNS Configuration </h2><hr>
+
+                    <form action="/" method="post" enctype = "multipart/form-data">
+
+                        <div class="row">
+                            <!--Orga fields-->
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text select" style="width: 500px;">
+                                    <select name="organizations_select" id='organizations_select' required >
+                                        <option disabled selected hidden value="0">Please choose...</option>
+                                        {% for orga in dropdown_content %}<option value="{{orga.orgaid}}" {% if selected_elements.organization == orga.orgaid %} selected {% endif %}>{{orga.organame}} </option>{% endfor %}
+                                    </select>
+                                    <label for="organizations_select">Choose Organization*</label>
+                                </div>
+                            </div>
+
+                            <!--Network fields-->
+                            {% for orga in dropdown_content %}
+                            <div id="{{orga.orgaid}}" class="network-select" {% if selected_elements.organization != orga.orgaid %} hidden {% endif %}>
+                                <div class="form-group base-margin-bottom">
+                                    <div class="form-group__text select" style="width: 500px;">
+                                        <select name="network" class='networks'>
+                                            <option disabled selected hidden value="0">Please choose...</option>
+                                            {% for network in orga['networks'] %}
+                                                <option value="{{network['networkid']}}" {% if selected_elements.network_id == network['networkid'] %} selected {% endif %}>{{network['networkname']}} </option>                                                      
+                                            {% endfor %}
+                                        </select>
+                                        <label for="network">Choose Network*</label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                       
+                        
+                               
+                              
+                                    <div class="form-group base-margin-bottom" style="width: 250px;">
+                                       
+                                        <div class="form-group__text">
+                                            <input type="text" id="dns" name="dns" required="" placeholder="Enter DNS">
+                                        </div>
+                                    </div>
+                                   
+                                
+
+                            
+                            
+                                </div>
+                            <button id="submit-file" onclick="this.innerHTML='Loading...'" style="color: white;font-size: large;margin-bottom: 10px; left:500px;" class="btn btn--primary" type="submit">Sumbit</button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+       
+        {% if success %}
+        
+        <div class="col-4">
+            <div class="section">
+                <div class="panel panel--loose panel--raised base-margin-bottom" style="padding: 50px;">
+                    <h2 class="subtitle">Configuration Status </h2><hr>
+
+                    <div class="section">
+                        <div class="row">
+                        </div>
+                        </form>
+                       
+                        <div class="toast base-margin-bottom">
+                            <div class="toast__icon text-success icon-check-outline"></div>
+                            <div class="toast__body">
+                                <div class="toast__title">DNS Configuration Complete</div>
+                                                                
+                                <div class="toast__message"> 
+                                    DNS was configured for the following APs: {% for name in names %}
+                                    {{name}} <br>
+                                    {% endfor %}
+                                </div>
+                                
+                                   
+                            </div>
+                        </div>
+                    
+                    
+                </div>
+            </div>
+            </div>
+        </div>
+       
+        {% endif %}
+
+
+        {% if error %}
+        <div class="col-4">
+            <div class="section">
+                <div class="panel panel--loose panel--raised base-margin-bottom" style="padding: 50px;">
+                    <h2 class="subtitle">Configuration Status </h2><hr>
+
+                    <div class="section">
+                        <div class="row">
+                        </div>
+                        </form>
+                        
+                       
+                        <div class="toast base-margin-bottom">
+                            <div class="toast__icon text-danger icon-error-outline"></div>
+                            <div class="toast__body">
+                                <div class="toast__title">DNS Configuration Failed</div>
+                                <div class="toast__message">Something Went Wrong </div>
+                            </div>
+                        </div>
+                     
+                    
+                    
+                    
+                </div>
+            </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+
+
+</div>
+{%  endblock %}
